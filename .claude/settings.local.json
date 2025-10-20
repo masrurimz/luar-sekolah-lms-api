@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(bun pm ls:*)",
+      "Bash(cat:*)",
+      "WebFetch(domain:tanstack.com)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(grep:*)",
+      "Bash(bun run:*)",
+      "mcp__serena__find_file",
+      "mcp__serena__search_for_pattern",
+      "mcp__serena__list_dir",
+      "Bash(find:*)",
+      "WebFetch(domain:lingui.dev)",
+      "mcp__serena__replace_regex"
+    ],
+    "deny": [],
+    "additionalDirectories": [
+      "/Users/masrurimz/Projects/labs/tanstarter/",
+      "/Users/masrurimz/Projects/nimbly/admin-lite/"
+    ]
+  }
+}
