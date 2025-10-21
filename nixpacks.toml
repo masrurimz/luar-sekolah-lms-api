@@ -1,0 +1,26 @@
+[phases.setup]
+nixPkgs = ["nodejs", "bun", "postgresql"]
+
+[phases.install]
+cmd = "bun install --frozen-lockfile"
+
+[phases.build]
+cmd = "cd apps/web && bun run build"
+
+[start]
+cmd = "cd apps/web && bun run start"
+
+[variables]
+NODE_ENV = "production"
+PORT = "3000"
+
+[deploy]
+healthcheckPath = "/api/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
+
+[[deploy.volumes]]
+type = "shared"
+name = "data"
+mountPath = "/app/data"
