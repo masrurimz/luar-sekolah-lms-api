@@ -1,12 +1,13 @@
 /**
- * Create Todo Handler
+ * Update Todo Handler
  *
- * Application layer: Implements TodoContracts.create with public access.
- * Coordinates between repository and service layers for todo creation.
+ * Application layer: Implements TodoContracts.update with public access.
+ * Coordinates between repository and service layers for todo updates.
  *
  * Architecture:
- * - Uses implement() with TodoContracts.create for type-safe handler
+ * - Uses implement() with TodoContracts.update for type-safe handler
  * - Uses publicProcedure for public access (no authentication required)
+ * - Validates todo existence before update
  * - Applies service layer validation for business rules
  * - Coordinates with TodoRepository for data persistence
  * - Throws typed errors with automatic inference
@@ -21,31 +22,43 @@ import { TodoContracts } from "../-domain/contracts";
 import { TodoRepository } from "../-lib/todo-repository";
 import { TodoService } from "../-domain/services";
 
-export const createTodo = implement(TodoContracts.create)
+export const updateTodo = implement(TodoContracts.update)
   .$context<Context>()
   .handler(async ({ input, context, errors }) => {
+    const { id } = input;
+
+    // First check if todo exists
+    const existingTodo = await TodoRepository.getById(context.db, id);
+    if (!existingTodo) {
+      throw errors.NOT_FOUND({
+        data: {
+          id,
+        },
+      });
+    }
+
     // Validate input using service layer
-    const validation = TodoService.validateCreateTodo(input);
+    const validation = TodoService.validateUpdateTodo(input);
     if (!validation.valid) {
       if (validation.field === "text") {
         if (validation.reason?.includes("cannot exceed")) {
           throw errors.TEXT_TOO_LONG({
             data: {
-              text: input.text,
+              text: input.text || "",
               maxLength: 500,
             },
           });
         } else if (validation.reason?.includes("must be at least")) {
           throw errors.TEXT_TOO_SHORT({
             data: {
-              text: input.text,
+              text: input.text || "",
               minLength: 1,
             },
           });
         } else {
           throw errors.INVALID_TEXT({
             data: {
-              text: input.text,
+              text: input.text || "",
               reason: validation.reason || "Invalid todo text",
             },
           });
@@ -61,21 +74,30 @@ export const createTodo = implement(TodoContracts.create)
     }
 
     try {
-      // Prepare input data using service layer
-      const preparedInput = TodoService.prepareTodoForCreation(input);
+      // Prepare update data using service layer
+      const preparedUpdateData = TodoService.prepareTodoForUpdate(input);
 
-      // Repository operation to create todo
-      const createdTodo = await TodoRepository.create(context.db, preparedInput);
+      // Repository operation to update todo
+      const updatedTodo = await TodoRepository.update(context.db, id, preparedUpdateData);
 
-      return createdTodo;
+      if (!updatedTodo) {
+        throw errors.CANNOT_UPDATE({
+          data: {
+            id,
+            reason: "Todo could not be updated",
+          },
+        });
+      }
+
+      return updatedTodo;
     } catch (dbError) {
       // Handle database errors
-      console.error("Database error in createTodo:", dbError);
+      console.error("Database error in updateTodo:", dbError);
 
       throw errors.VALIDATION_FAILED({
         data: {
           field: "database",
-          reason: "Failed to create todo",
+          reason: "Failed to update todo",
         },
       });
     }

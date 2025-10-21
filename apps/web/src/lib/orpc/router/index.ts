@@ -2,8 +2,10 @@ import { protectedProcedure, publicProcedure } from '@/lib/orpc';
 import { getSession } from '@/routes/auth/-app/get-session';
 import { createTodo } from '@/routes/todos/-app/create-todo';
 import { deleteTodo } from '@/routes/todos/-app/delete-todo';
+import { getTodo } from '@/routes/todos/-app/get-todo';
 import { getTodos } from '@/routes/todos/-app/get-todos';
 import { toggleTodo } from '@/routes/todos/-app/toggle-todo';
+import { updateTodo } from '@/routes/todos/-app/update-todo';
 
 // Course feature imports
 import { getCourses } from '@/routes/courses/-app/get-courses';
@@ -18,7 +20,7 @@ import { getMyCourses } from '@/routes/courses/-app/get-my-courses';
  * Main oRPC Router
  *
  * This router provides a unified API interface for the entire application,
- * following Clean Architecture principles with feature-based organization.
+ * following Clean Architecture principles with feature-based organization
  *
  * **Architecture Benefits:**
  * - **Unified Data Layer**: All API calls go through oRPC for consistency
@@ -61,7 +63,9 @@ export default {
    */
   todo: {
     getAll: getTodos,
+    get: getTodo,
     create: createTodo,
+    update: updateTodo,
     toggle: toggleTodo,
     delete: deleteTodo,
   },

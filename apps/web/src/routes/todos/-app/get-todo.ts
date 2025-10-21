@@ -1,14 +1,13 @@
 /**
- * Toggle Todo Handler
+ * Get Todo Handler
  *
- * Application layer: Implements TodoContracts.toggle with public access.
- * Coordinates between repository for todo completion status toggle.
+ * Application layer: Implements TodoContracts.get with public access.
+ * Retrieves a specific todo by ID with proper error handling.
  *
  * Architecture:
- * - Uses implement() with TodoContracts.toggle for type-safe handler
+ * - Uses implement() with TodoContracts.get for type-safe handler
  * - Uses publicProcedure for public access (no authentication required)
- * - Validates todo existence before toggle
- * - Coordinates with TodoRepository for status toggle
+ * - Coordinates with TodoRepository for data retrieval
  * - Throws typed errors with automatic inference
  *
  * Layer: Application
@@ -20,16 +19,16 @@ import type { Context } from "@/lib/orpc/context";
 import { TodoContracts } from "../-domain/contracts";
 import { TodoRepository } from "../-lib/todo-repository";
 
-export const toggleTodo = implement(TodoContracts.toggle)
+export const getTodo = implement(TodoContracts.get)
   .$context<Context>()
   .handler(async ({ input, context, errors }) => {
     const { id } = input;
 
     try {
-      // Repository operation to toggle todo completion status
-      const toggledTodo = await TodoRepository.toggle(context.db, id);
+      // Repository operation to fetch specific todo
+      const todo = await TodoRepository.getById(context.db, id);
 
-      if (!toggledTodo) {
+      if (!todo) {
         throw errors.NOT_FOUND({
           data: {
             id,
@@ -37,15 +36,15 @@ export const toggleTodo = implement(TodoContracts.toggle)
         });
       }
 
-      return toggledTodo;
+      return todo;
     } catch (dbError) {
       // Handle database errors
-      console.error("Database error in toggleTodo:", dbError);
+      console.error("Database error in getTodo:", dbError);
 
       throw errors.VALIDATION_FAILED({
         data: {
           field: "database",
-          reason: "Failed to toggle todo status",
+          reason: "Failed to retrieve todo",
         },
       });
     }

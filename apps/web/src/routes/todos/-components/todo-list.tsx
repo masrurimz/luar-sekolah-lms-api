@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { orpc } from '@/lib/orpc/client';
-import type { Todo } from '@/routes/todos/-domain/todo-entity';
+import type { Todo } from '@/routes/todos/-domain/entities';
 
 interface TodoItemProps {
   todo: Todo;
@@ -34,7 +34,7 @@ function TodoItem({ todo }: TodoItemProps) {
   );
 
   const handleToggle = () => {
-    toggleTodo({ id: todo.id, completed: !todo.completed });
+    toggleTodo({ id: todo.id });
   };
 
   const handleDelete = () => {
@@ -87,11 +87,13 @@ function TodoItem({ todo }: TodoItemProps) {
 }
 
 export function TodoList() {
-  const { data: todos, isLoading } = useQuery(
+  const { data: todosResponse, isLoading } = useQuery(
     orpc.todo.getAll.queryOptions({
       input: {},
     })
   );
+
+  const todos = todosResponse?.todos;
 
   if (isLoading) {
     return (
