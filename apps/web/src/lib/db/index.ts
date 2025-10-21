@@ -22,3 +22,5 @@ export const client = new SQL({
 
 // Create Drizzle instance
 export const db = drizzle({ client, schema });
+
+export type DatabaseType = typeof db;

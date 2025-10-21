@@ -24,13 +24,18 @@ const handler = new OpenAPIHandler(router, {
       schemaConverters: [new ZodToJsonSchemaConverter()],
       specGenerateOptions: {
         info: {
-          title: 'TanStack ORPC Playground',
+          title: 'Luar Sekolah LMS API',
           version: '1.0.0',
+          description: 'Learning Management System API for course management and enrollment',
         },
         commonSchemas: {
           Todo: { schema: TodoSchema },
           UndefinedError: { error: 'UndefinedError' },
         },
+        tags: [
+          { name: 'Courses', description: 'Course management operations' },
+          { name: 'Enrollments', description: 'Course enrollment operations' },
+        ],
         security: [{ bearerAuth: [] }],
         components: {
           securitySchemes: {

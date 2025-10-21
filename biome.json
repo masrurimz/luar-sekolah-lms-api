@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "ignoreUnknown": false,
     "includes": [
@@ -17,8 +17,10 @@
       "!**/.expo",
       "!**/.wrangler",
       "!**/.source",
+      "!**/.archieved",
       "!**/tsconfig.json",
-      "!**/tsconfig.*.json"
+      "!**/tsconfig.*.json",
+      "!**/-poc"
     ]
   },
   "extends": ["ultracite"],
@@ -29,6 +31,167 @@
         "rules": {
           "style": {
             "useFilenamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/env/**/*.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off",
+            "noMagicNumbers": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.css"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noUnknownAtRules": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/demo/**/*", "**/routes/demo/**/*"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noAlert": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/schema/**/*", "**/lib/db/schema/**/*"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noBarrelFile": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/validation.ts", "**/*validation*.ts", "**/*schemas*.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noMagicNumbers": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/lib/db/seed/**/*", "**/seed/**/*.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          },
+          "style": {
+            "noMagicNumbers": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/auth/**/*", "**/lib/auth/**/*"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off",
+            "noMagicNumbers": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/api/**/*"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/lingui/**/*", "**/i18n/**/*"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/lib/db/**/*"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/admin/**/*"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useButtonType": "off",
+            "noLabelWithoutControl": "off",
+            "noSvgWithoutTitle": "off",
+            "useValidAnchor": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          },
+          "style": {
+            "noNestedTernary": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/demo/**/*"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          },
+          "suspicious": {
+            "noAlert": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "**/-domain/errors.ts",
+        "**/-domain/contracts.ts",
+        "**/-domain/schemas.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/web/src/components/ui/**/*"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noNamespaceImport": "off"
           }
         }
       }
