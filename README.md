@@ -1,4 +1,8 @@
-# 🚀 Betterz Stack Template
+# 🚀 Luar Sekolah LMS
+
+**Learning Management System for Indonesian Schools**
+
+> 📚 **Note**: This project is forked from the [betterz-stack](https://github.com/masrurimz/betterz-stack) template and customized for educational purposes.
 
 > **Production-ready full-stack TypeScript template** with unified oRPC architecture, Clean Architecture principles, and modern development tooling.
 
@@ -56,7 +60,7 @@ A modern, type-safe, and scalable foundation for building full-stack application
 Make sure you have the following installed:
 - **Node.js** 18+ ([Download](https://nodejs.org))
 - **Bun** 1.2+ ([Install](https://bun.sh))
-- **Docker** ([Install](https://docker.com)) 
+- **Docker** ([Install](https://docker.com))
 - **Git** ([Install](https://git-scm.com))
 
 ### 1. Clone & Install
@@ -147,12 +151,12 @@ apps/web/src/
 ### Layer Dependencies
 
 ```
-Presentation (-components) 
-    ↓ 
-Application (-app) 
-    ↓ 
-Domain (-domain) 
-    ↑ 
+Presentation (-components)
+    ↓
+Application (-app)
+    ↓
+Domain (-domain)
+    ↑
 Infrastructure (lib/)
 ```
 
@@ -350,11 +354,11 @@ import { useLingui } from '@lingui/react/macro';
 export function PostList() {
   const { t } = useLingui();
   const { data: posts } = useQuery(orpc.posts.getAll.queryOptions({}));
-  
+
   if (!posts?.length) {
     return <p>{t`No posts found`}</p>;
   }
-  
+
   return (
     <div>
       <h2>{t`Posts`}</h2>
@@ -455,7 +459,7 @@ src/
 # Extract translatable strings from code
 bun run lingui:extract
 
-# Compile translations for production  
+# Compile translations for production
 bun run lingui:compile
 
 # Extract and compile in one command
@@ -473,7 +477,7 @@ import { useLingui } from '@lingui/react/macro';
 
 export function LoginForm() {
   const { t } = useLingui();
-  
+
   return (
     <button>{t`Login`}</button>  // ✅ Correct usage
   );
@@ -535,9 +539,9 @@ import { cn } from '@/lib/utils';
 
 export function CustomButton({ className, ...props }) {
   return (
-    <Button 
-      className={cn('bg-gradient-to-r from-blue-500 to-purple-600', className)} 
-      {...props} 
+    <Button
+      className={cn('bg-gradient-to-r from-blue-500 to-purple-600', className)}
+      {...props}
     />
   );
 }

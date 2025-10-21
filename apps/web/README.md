@@ -1,376 +1,227 @@
-Welcome to your new TanStack app! 
+# Luar Sekolah LMS
 
-# Getting Started
+**Learning Management System for Indonesian Schools**
 
-To run this application:
+> 📚 **Note**: This project is forked from the [betterz-stack](https://github.com/masrurimz/betterz-stack) template and customized for educational purposes.
+
+Built with modern web technologies to provide a comprehensive learning platform for Indonesian schools.
+
+## 🚀 Tech Stack
+
+- **Framework**: TanStack Start
+- **Database**: PostgreSQL with Drizzle ORM
+- **Styling**: Tailwind CSS
+- **Authentication**: Better Auth
+- **UI Components**: Radix UI + Shadcn
+- **Language**: TypeScript
+- **Package Manager**: Bun
+- **Deployment**: Cloudflare Workers (optional)
+
+## 🛠️ Development Setup
+
+### Prerequisites
+
+- Node.js 18+ or Bun
+- PostgreSQL database
+- Docker (optional, for local database)
+
+### 1. Install Dependencies
 
 ```bash
 bun install
-bunx --bun run start
 ```
 
-# Building For Production
+### 2. Database Setup
 
-To build this application for production:
+#### Option A: Docker (Recommended)
 
 ```bash
-bunx --bun run build
+# Start PostgreSQL container
+bun run db:start
+
+# Run migrations
+bun run db:push
+
+# (Optional) Open database studio
+bun run db:studio
 ```
 
-## Testing
+#### Option B: Local PostgreSQL
 
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+Update your `.env` file with your PostgreSQL credentials:
+
+```env
+DATABASE_URL="postgresql://username:password@localhost:5432/luar_sekolah_lms"
+```
+
+Then run migrations:
 
 ```bash
-bunx --bun run test
+bun run db:push
 ```
 
-## Styling
+### 3. Environment Configuration
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-
-## Linting & Formatting
-
-This project uses [Biome](https://biomejs.dev/) for linting and formatting. The following scripts are available:
-
+Copy the environment file and update the values:
 
 ```bash
-bunx --bun run lint
-bunx --bun run format
-bunx --bun run check
+cp .env.example .env
 ```
 
+Key environment variables:
 
-## Shadcn
+```env
+# Database
+DATABASE_URL="postgresql://luar_sekolah:luar123456@localhost:5432/luar_sekolah_lms"
 
-Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
+# Auth
+BETTER_AUTH_SECRET="your-secret-key"
+BETTER_AUTH_URL="http://localhost:3000"
+
+# OAuth (Optional)
+GITHUB_CLIENT_ID=""
+GITHUB_CLIENT_SECRET=""
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+```
+
+### 4. Start Development Server
 
 ```bash
-pnpx shadcn@latest add button
+bun run dev
 ```
 
+Visit `http://localhost:3000` to see the application.
 
-## Internationalization (i18n)
+## 📚 Available Scripts
 
-This project uses [Lingui](https://lingui.dev/) for internationalization with feature-first translation structure.
-
-### Available Languages
-- English (default)
-- Indonesian (`?locale=id`)
-
-### Usage Patterns
-
-**Components:**
-```tsx
-import { useLingui } from '@lingui/react/macro';
-import { Trans } from '@lingui/react/macro';
-
-function MyComponent() {
-  const { t } = useLingui();
-  
-  return (
-    <div>
-      <input placeholder={t`Enter text...`} />
-      <button><Trans>Submit</Trans></button>
-    </div>
-  );
-}
-```
-
-**Root/Layout:**
-```tsx
-import { useLingui } from '@lingui/react';
-
-function RootLayout() {
-  const { i18n } = useLingui();
-  return <html lang={i18n.locale}>...</html>;
-}
-```
-
-### Commands
 ```bash
-bun run lingui:extract  # Extract translatable strings
-bun run lingui:compile  # Compile translations
+# Development
+bun run dev              # Start development server
+bun run db:start         # Start PostgreSQL with Docker
+bun run db:stop          # Stop PostgreSQL container
+bun run db:studio        # Open Drizzle Studio
+
+# Database
+bun run db:push          # Push schema changes
+bun run db:generate      # Generate migrations
+bun run db:migrate       # Run migrations
+bun run db:down          # Stop and remove database
+
+# Building
+bun run build            # Build for production
+bun run preview          # Preview production build
+
+# Code Quality
+bun run lint             # Lint code
+bun run format           # Format code
+bun run check            # Check and auto-fix issues
+bun run check-types      # Type checking
+
+# Testing
+bun run test             # Run tests
+
+# Internationalization
+bun run lingui:extract   # Extract translatable strings
+bun run lingui:compile   # Compile translations
 ```
+
+## 🌍 Internationalization
+
+This project supports Indonesian and English languages.
 
 ### Adding Translations
-1. Add strings using `t\`message\`` or `<Trans>message</Trans>`
-2. Run `bun run lingui:extract` to update `.po` files
-3. Translate in `src/locales/{locale}/messages.po`
 
-## T3Env
+1. Use translatable strings in components:
+   ```tsx
+   import { Trans } from '@lingui/react/macro';
 
-- You can use T3Env to add type safety to your environment variables.
-- Add Environment variables to the `src/env.mjs` file.
-- Use the environment variables in your code.
+   <Trans>Selamat datang di Luar Sekolah LMS</Trans>
+   ```
 
-### Usage
+2. Extract new strings:
+   ```bash
+   bun run lingui:extract
+   ```
 
-```ts
-import { env } from "@/env";
+3. Add translations in `src/locales/id/messages.po`
 
-console.log(env.VITE_APP_TITLE);
-```
+4. Compile translations:
+   ```bash
+   bun run lingui:compile
+   ```
 
+## 🎨 UI Components
 
-
-
-
-
-## Routing
-This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add another a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-
-import { Link } from "@tanstack/react-router";
-
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-})
-```
-
-The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-const peopleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/people",
-  loader: async () => {
-    const response = await fetch("https://swapi.dev/api/people");
-    return response.json() as Promise<{
-      results: {
-        name: string;
-      }[];
-    }>;
-  },
-  component: () => {
-    const data = peopleRoute.useLoaderData();
-    return (
-      <ul>
-        {data.results.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    );
-  },
-});
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-### React-Query
-
-React-Query is an excellent addition or alternative to route loading and integrating it into you application is a breeze.
-
-First add your dependencies:
+Add new components using Shadcn:
 
 ```bash
-bun install @tanstack/react-query @tanstack/react-query-devtools
+bun run ui button
+bun run ui card
+bun run ui input
 ```
 
-Next we'll need to create a query client and provider. We recommend putting those in `main.tsx`.
+## 🔐 Authentication
 
-```tsx
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+The app uses Better Auth for authentication. Supported providers:
 
-// ...
+- Email/Password
+- GitHub OAuth
+- Google OAuth
 
-const queryClient = new QueryClient();
+Configure OAuth providers in your `.env` file.
 
-// ...
+## 📁 Project Structure
 
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-
-  root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  );
-}
+```
+src/
+├── components/          # Reusable UI components
+├── lib/                # Utilities and configurations
+│   ├── db/            # Database schema and client
+│   └── auth/          # Authentication configuration
+├── locales/           # Translation files
+├── routes/            # File-based routing
+└── app/              # Main app components
 ```
 
-You can also add TanStack Query Devtools to the root route (optional).
+## 🚀 Deployment
 
-```tsx
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+### Cloudflare Workers
 
-const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-```
+1. Build the application:
+   ```bash
+   bun run build
+   ```
 
-Now you can use `useQuery` to fetch your data.
+2. Deploy to Cloudflare:
+   ```bash
+   bun run deploy
+   ```
 
-```tsx
-import { useQuery } from "@tanstack/react-query";
+### Other Platforms
 
-import "./App.css";
+The application can be deployed to any platform that supports Node.js applications.
 
-function App() {
-  const { data } = useQuery({
-    queryKey: ["people"],
-    queryFn: () =>
-      fetch("https://swapi.dev/api/people")
-        .then((res) => res.json())
-        .then((data) => data.results as { name: string }[]),
-    initialData: [],
-  });
+## 🤝 Contributing
 
-  return (
-    <div>
-      <ul>
-        {data.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
-export default App;
-```
+## 📄 License
 
-You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
+This project is licensed under the MIT License.
 
-## State Management
+## 🆘 Support
 
-Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
+For support and questions:
 
-First you need to add TanStack Store as a dependency:
+- Create an issue in the repository
+- Check the documentation
+- Join our community discussions
 
-```bash
-bun install @tanstack/store
-```
+---
 
-Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-function App() {
-  const count = useStore(countStore);
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-    </div>
-  );
-}
-
-export default App;
-```
-
-One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
-
-Let's check this out by doubling the count using derived state.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store, Derived } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-const doubledStore = new Derived({
-  fn: () => countStore.state * 2,
-  deps: [countStore],
-});
-doubledStore.mount();
-
-function App() {
-  const count = useStore(countStore);
-  const doubledCount = useStore(doubledStore);
-
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-      <div>Doubled - {doubledCount}</div>
-    </div>
-  );
-}
-
-export default App;
-```
-
-We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
-
-Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
-
-You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+**Luar Sekolah LMS** - Membangun masa depan pendidikan Indonesia 🇮🇩

@@ -1,23 +1,23 @@
-name: my-better-t-app
+name: luar-sekolah-lms
 
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: my-better-t-app-postgres
+    container_name: luar-sekolah-lms-postgres
     environment:
-      POSTGRES_DB: my_better_t_app
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: luar_sekolah_lms
+      POSTGRES_USER: luar_sekolah
+      POSTGRES_PASSWORD: luar123456
     ports:
       - "5432:5432"
     volumes:
-      - my_better_t_app_postgres_data:/var/lib/postgresql/data
+      - luar_sekolah_lms_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U luar_sekolah"]
       interval: 10s
       timeout: 5s
       retries: 5
     restart: unless-stopped
 
 volumes:
-  my_better_t_app_postgres_data:
+  luar_sekolah_lms_postgres_data:
