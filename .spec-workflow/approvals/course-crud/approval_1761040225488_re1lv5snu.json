@@ -1,0 +1,21 @@
+{
+  "id": "approval_1761040225488_re1lv5snu",
+  "title": "Course CRUD Tasks Document",
+  "filePath": ".spec-workflow/specs/course-crud/tasks.md",
+  "type": "document",
+  "status": "needs-revision",
+  "createdAt": "2025-10-21T09:50:25.488Z",
+  "category": "spec",
+  "categoryName": "course-crud",
+  "response": "Feedback Summary (1 comments):\n\nGeneral Comments:\n1. should be feature based as per steering docs  check again\n\n",
+  "annotations": "{\n  \"decision\": \"needs-revision\",\n  \"comments\": [\n    {\n      \"type\": \"general\",\n      \"comment\": \"should be feature based as per steering docs  check again\",\n      \"timestamp\": \"2025-10-21T09:59:44.267Z\",\n      \"id\": \"comment_1761040784267_e8fv8ihbg\"\n    }\n  ],\n  \"summary\": \"Feedback Summary (1 comments):\\n\\nGeneral Comments:\\n1. should be feature based as per steering docs  check again\\n\\n\",\n  \"timestamp\": \"2025-10-21T09:59:46.981Z\"\n}",
+  "respondedAt": "2025-10-21T09:59:47.003Z",
+  "comments": [
+    {
+      "type": "general",
+      "comment": "should be feature based as per steering docs  check again",
+      "timestamp": "2025-10-21T09:59:44.267Z",
+      "id": "comment_1761040784267_e8fv8ihbg"
+    }
+  ]
+}

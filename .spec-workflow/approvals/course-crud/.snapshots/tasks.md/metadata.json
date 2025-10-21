@@ -1,0 +1,46 @@
+{
+  "filePath": ".spec-workflow/specs/course-crud/tasks.md",
+  "currentVersion": 5,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2025-10-21T09:50:25.490Z",
+      "trigger": "initial",
+      "approvalId": "approval_1761040225488_re1lv5snu",
+      "approvalTitle": "Course CRUD Tasks Document"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2025-10-21T09:59:47.000Z",
+      "trigger": "revision_requested",
+      "approvalId": "approval_1761040225488_re1lv5snu",
+      "approvalTitle": "Course CRUD Tasks Document"
+    },
+    {
+      "version": 3,
+      "filename": "snapshot-003.json",
+      "timestamp": "2025-10-21T10:18:24.628Z",
+      "trigger": "revision_requested",
+      "approvalId": "approval_1761040982091_tn8m9fqkx",
+      "approvalTitle": "Course CRUD Tasks Document (Revised - Feature-Based)"
+    },
+    {
+      "version": 4,
+      "filename": "snapshot-004.json",
+      "timestamp": "2025-10-21T10:25:31.952Z",
+      "trigger": "approved",
+      "approvalId": "approval_1761042315680_1a37v21jx",
+      "approvalTitle": "Course CRUD Tasks Document (Revised - Schema Complete)"
+    },
+    {
+      "version": 5,
+      "filename": "snapshot-005.json",
+      "timestamp": "2025-10-21T10:27:38.902Z",
+      "trigger": "approved",
+      "approvalId": "approval_1761042439000_srga7yk4j",
+      "approvalTitle": "Course CRUD Tasks Document (Revised - OpenAPI Metadata)"
+    }
+  ]
+}

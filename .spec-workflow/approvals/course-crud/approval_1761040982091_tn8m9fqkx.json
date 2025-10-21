@@ -1,0 +1,21 @@
+{
+  "id": "approval_1761040982091_tn8m9fqkx",
+  "title": "Course CRUD Tasks Document (Revised - Feature-Based)",
+  "filePath": ".spec-workflow/specs/course-crud/tasks.md",
+  "type": "document",
+  "status": "needs-revision",
+  "createdAt": "2025-10-21T10:03:02.091Z",
+  "category": "spec",
+  "categoryName": "course-crud",
+  "response": "Feedback Summary (1 comments):\n\nGeneral Comments:\n1. last check on docs how to properly do the openAPI docs for orpc, leverage context7\n\n",
+  "annotations": "{\n  \"decision\": \"needs-revision\",\n  \"comments\": [\n    {\n      \"type\": \"general\",\n      \"comment\": \"last check on docs how to properly do the openAPI docs for orpc, leverage context7\",\n      \"timestamp\": \"2025-10-21T10:18:23.428Z\",\n      \"id\": \"comment_1761041903428_n0p55dfan\"\n    }\n  ],\n  \"summary\": \"Feedback Summary (1 comments):\\n\\nGeneral Comments:\\n1. last check on docs how to properly do the openAPI docs for orpc, leverage context7\\n\\n\",\n  \"timestamp\": \"2025-10-21T10:18:24.620Z\"\n}",
+  "respondedAt": "2025-10-21T10:18:24.632Z",
+  "comments": [
+    {
+      "type": "general",
+      "comment": "last check on docs how to properly do the openAPI docs for orpc, leverage context7",
+      "timestamp": "2025-10-21T10:18:23.428Z",
+      "id": "comment_1761041903428_n0p55dfan"
+    }
+  ]
+}

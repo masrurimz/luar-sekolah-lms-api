@@ -1,0 +1,21 @@
+{
+  "id": "approval_1761039512429_qroxucgz6",
+  "title": "Course CRUD Requirements Document",
+  "filePath": ".spec-workflow/specs/course-crud/requirements.md",
+  "type": "document",
+  "status": "needs-revision",
+  "createdAt": "2025-10-21T09:38:32.429Z",
+  "category": "spec",
+  "categoryName": "course-crud",
+  "response": "Feedback Summary (1 comments):\n\nGeneral Comments:\n1. all course crud will be public\nonly enroll and list my coruse that are private\n\n",
+  "annotations": "{\n  \"decision\": \"needs-revision\",\n  \"comments\": [\n    {\n      \"type\": \"general\",\n      \"comment\": \"all course crud will be public\\nonly enroll and list my coruse that are private\",\n      \"timestamp\": \"2025-10-21T09:39:40.251Z\",\n      \"id\": \"comment_1761039580251_epvwalddt\"\n    }\n  ],\n  \"summary\": \"Feedback Summary (1 comments):\\n\\nGeneral Comments:\\n1. all course crud will be public\\nonly enroll and list my coruse that are private\\n\\n\",\n  \"timestamp\": \"2025-10-21T09:39:41.148Z\"\n}",
+  "respondedAt": "2025-10-21T09:39:41.157Z",
+  "comments": [
+    {
+      "type": "general",
+      "comment": "all course crud will be public\nonly enroll and list my coruse that are private",
+      "timestamp": "2025-10-21T09:39:40.251Z",
+      "id": "comment_1761039580251_epvwalddt"
+    }
+  ]
+}

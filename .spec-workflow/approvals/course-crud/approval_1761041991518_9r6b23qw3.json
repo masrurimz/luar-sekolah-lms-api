@@ -1,0 +1,12 @@
+{
+  "id": "approval_1761041991518_9r6b23qw3",
+  "title": "Course CRUD Tasks Document (Revised - OpenAPI)",
+  "filePath": ".spec-workflow/specs/course-crud/tasks.md",
+  "type": "document",
+  "status": "rejected",
+  "createdAt": "2025-10-21T10:19:51.518Z",
+  "category": "spec",
+  "categoryName": "course-crud",
+  "response": "openapi already auto configured so no need the generator or other tihings, just ensure we have to ensure the schema is fully completed and has all the field referenced for open api in orpc documentation, you can explore to check open api integration wiht scalar to verify",
+  "respondedAt": "2025-10-21T10:23:55.904Z"
+}

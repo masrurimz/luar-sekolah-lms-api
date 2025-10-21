@@ -1,0 +1,22 @@
+{
+  "filePath": ".spec-workflow/specs/course-crud/design.md",
+  "currentVersion": 2,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2025-10-21T09:47:01.853Z",
+      "trigger": "initial",
+      "approvalId": "approval_1761040021851_o3a3obviv",
+      "approvalTitle": "Course CRUD Design Document"
+    },
+    {
+      "version": 2,
+      "filename": "snapshot-002.json",
+      "timestamp": "2025-10-21T09:48:21.165Z",
+      "trigger": "approved",
+      "approvalId": "approval_1761040021851_o3a3obviv",
+      "approvalTitle": "Course CRUD Design Document"
+    }
+  ]
+}
