@@ -2,6 +2,7 @@ import { serverOnly } from '@tanstack/react-start';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { reactStartCookies } from 'better-auth/react-start';
+import { openAPI } from "better-auth/plugins"
 import { env } from '../../env/server';
 import { db } from '../db';
 import { generateUUID } from '../db/schema';
@@ -21,7 +22,7 @@ const getAuthConfig = serverOnly(() => {
     }),
 
     // https://www.better-auth.com/docs/integrations/tanstack#usage-tips
-    plugins: [reactStartCookies()],
+    plugins: [reactStartCookies(), openAPI()],
 
     // https://www.better-auth.com/docs/concepts/session-management#session-caching
     // session: {
