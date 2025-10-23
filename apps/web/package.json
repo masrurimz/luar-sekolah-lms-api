@@ -29,6 +29,7 @@
     "@lingui/core": "^5.4.1",
     "@lingui/react": "^5.4.1",
     "@orpc/client": "^1.7.11",
+    "@orpc/contract": "^1.10.0",
     "@orpc/json-schema": "^1.7.11",
     "@orpc/openapi": "^1.7.11",
     "@orpc/server": "^1.7.11",
