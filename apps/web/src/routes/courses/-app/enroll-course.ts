@@ -22,7 +22,6 @@ import type { Context } from "@/lib/orpc/context";
 import { EnrollmentContracts } from "../-domain/contracts";
 import { EnrollmentRepository } from "../-lib/enrollment-repository";
 import { CourseRepository } from "../-lib/course-repository";
-import { EnrollmentService } from "../-domain/services";
 
 export const enrollCourse = implement(EnrollmentContracts.enroll)
   .$context<Context>()
@@ -37,83 +36,52 @@ export const enrollCourse = implement(EnrollmentContracts.enroll)
       });
     }
 
-    try {
-      // Validate user can enroll using service layer
-      const validationResult = await EnrollmentService.validateUserCanEnroll(userId, courseId, context.db);
+    // Check if course exists
+    const course = await CourseRepository.findById(context.db, courseId);
 
-      if (!validationResult.canEnroll) {
-        throw errors.ALREADY_ENROLLED({
-          data: {
-            userId,
-            courseId,
-          },
-        });
-      }
-
-      // Check if course exists
-      const course = await CourseRepository.findById(context.db, courseId);
-
-      if (!course) {
-        throw errors.COURSE_NOT_FOUND({
-          data: { courseId },
-        });
-      }
-
-      // Check for duplicate enrollment
-      const existingEnrollment = await EnrollmentRepository.findByUserAndCourse(context.db, userId, courseId);
-
-      if (existingEnrollment) {
-        throw errors.ALREADY_ENROLLED({
-          data: {
-            userId,
-            courseId,
-            enrollmentId: existingEnrollment.id,
-          },
-        });
-      }
-
-      // Repository operation to create enrollment
-      const newEnrollment = await EnrollmentRepository.create(context.db, {
-        userId,
-        courseId,
+    if (!course) {
+      throw errors.COURSE_NOT_FOUND({
+        data: { courseId },
       });
+    }
 
-      // Fetch enrollment with course details for response
-      const enrollmentWithCourse = await EnrollmentRepository.findById(context.db, newEnrollment.id);
+    // Check for duplicate enrollment
+    const existingEnrollment = await EnrollmentRepository.findByUserAndCourse(context.db, userId, courseId);
 
-      if (!enrollmentWithCourse) {
-        throw errors.ENROLLMENT_FAILED({
-          data: {
-            userId,
-            courseId,
-            reason: "Failed to retrieve created enrollment",
-          },
-        });
-      }
-
-
-      return {
-        ...enrollmentWithCourse,
-        course: enrollmentWithCourse.course ? {
-          ...enrollmentWithCourse.course,
-          price: parseFloat(enrollmentWithCourse.course.price), // Convert decimal string to number
-        } : undefined,
-      };
-    } catch (dbError) {
-      // Handle database errors
-      console.error("Database error in enrollCourse:", dbError);
-
-      // If it's already a known error, re-throw it
-      if (dbError && typeof dbError === "object" && "code" in dbError) {
-        throw dbError;
-      }
-
-      // Otherwise, throw a generic validation error
-      throw errors.VALIDATION_FAILED({
+    if (existingEnrollment) {
+      throw errors.ALREADY_ENROLLED({
         data: {
-          field: "database",
-          reason: "Failed to enroll in course",
+          userId,
+          courseId,
+          enrollmentId: existingEnrollment.id,
         },
       });
     }
-  });
+
+    // Repository operation to create enrollment
+    const newEnrollment = await EnrollmentRepository.create(context.db, {
+      userId,
+      courseId,
+    });
+
+    // Fetch enrollment with course details for response
+    const enrollmentWithCourse = await EnrollmentRepository.findById(context.db, newEnrollment.id);
+
+    if (!enrollmentWithCourse) {
+      throw errors.ENROLLMENT_FAILED({
+        data: {
+          userId,
+          courseId,
+          reason: "Failed to retrieve created enrollment",
+        },
+      });
+    }
+
+    return {
+      ...enrollmentWithCourse,
+      course: enrollmentWithCourse.course ? {
+        ...enrollmentWithCourse.course,
+        price: parseFloat(enrollmentWithCourse.course.price), // Convert decimal string to number
+      } : undefined,
+    };
+  });;

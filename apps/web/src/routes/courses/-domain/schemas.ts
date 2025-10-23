@@ -9,8 +9,7 @@ export abstract class CourseBaseSchemas {
    * UUID validation schema
    */
   static readonly uuid = z
-    .string()
-    .uuid('Invalid UUID format')
+    .uuidv7()
     .meta({
       description: 'Unique identifier for resources',
       examples: ['550e8400-e29b-41d4-a716-446655440000'],

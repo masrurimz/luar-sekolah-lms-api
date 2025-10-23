@@ -19,64 +19,12 @@ import { implement } from "@orpc/server";
 import type { Context } from "@/lib/orpc/context";
 import { TodoContracts } from "../-domain/contracts";
 import { TodoRepository } from "../-lib/todo-repository";
-import { TodoService } from "../-domain/services";
 
-export const createTodo = implement(TodoContracts.create)
+export   const createTodo = implement(TodoContracts.create)
   .$context<Context>()
-  .handler(async ({ input, context, errors }) => {
-    // Validate input using service layer
-    const validation = TodoService.validateCreateTodo(input);
-    if (!validation.valid) {
-      if (validation.field === "text") {
-        if (validation.reason?.includes("cannot exceed")) {
-          throw errors.TEXT_TOO_LONG({
-            data: {
-              text: input.text,
-              maxLength: 500,
-            },
-          });
-        } else if (validation.reason?.includes("must be at least")) {
-          throw errors.TEXT_TOO_SHORT({
-            data: {
-              text: input.text,
-              minLength: 1,
-            },
-          });
-        } else {
-          throw errors.INVALID_TEXT({
-            data: {
-              text: input.text,
-              reason: validation.reason || "Invalid todo text",
-            },
-          });
-        }
-      } else {
-        throw errors.VALIDATION_FAILED({
-          data: {
-            field: validation.field || "unknown",
-            reason: validation.reason || "Validation failed",
-          },
-        });
-      }
-    }
+  .handler(async ({ input, context }) => {
+    // Repository operation to create todo
+    const createdTodo = await TodoRepository.create(context.db, input);
 
-    try {
-      // Prepare input data using service layer
-      const preparedInput = TodoService.prepareTodoForCreation(input);
-
-      // Repository operation to create todo
-      const createdTodo = await TodoRepository.create(context.db, preparedInput);
-
-      return createdTodo;
-    } catch (dbError) {
-      // Handle database errors
-      console.error("Database error in createTodo:", dbError);
-
-      throw errors.VALIDATION_FAILED({
-        data: {
-          field: "database",
-          reason: "Failed to create todo",
-        },
-      });
-    }
-  });
+    return createdTodo;
+  });;

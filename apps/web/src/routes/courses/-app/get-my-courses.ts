@@ -22,7 +22,7 @@ import { EnrollmentContracts } from "../-domain/contracts";
 import { EnrollmentRepository } from "../-lib/enrollment-repository";
 import { EnrollmentService } from "../-domain/services";
 
-export const getMyCourses = implement(EnrollmentContracts.getMyCourses)
+export  const getMyCourses = implement(EnrollmentContracts.getMyCourses)
   .$context<Context>()
   .handler(async ({ input, context, errors }) => {
     const { limit = 50, offset = 0 } = input;
@@ -35,86 +35,40 @@ export const getMyCourses = implement(EnrollmentContracts.getMyCourses)
       });
     }
 
-    try {
-      // Validate pagination parameters
-      if (limit && limit < 1) {
-        throw errors.VALIDATION_FAILED({
-          data: {
-            field: "limit",
-            reason: "Limit must be at least 1",
-          },
-        });
-      }
+    // Repository operation to fetch user's enrollments
+    const result = await EnrollmentRepository.findByUser(context.db, userId, {
+      limit,
+      offset,
+    });
 
-      if (limit && limit > 100) {
-        throw errors.VALIDATION_FAILED({
-          data: {
-            field: "limit",
-            reason: "Limit cannot exceed 100",
-          },
-        });
-      }
-
-      if (offset && offset < 0) {
-        throw errors.VALIDATION_FAILED({
-          data: {
-            field: "offset",
-            reason: "Offset cannot be negative",
-          },
-        });
-      }
-
-      // Repository operation to fetch user's enrollments
-      const result = await EnrollmentRepository.findByUser(context.db, userId, {
-        limit,
-        offset,
-      });
-
-      // Apply business logic transformations
-      const enrollmentsWithDisplayInfo = result.enrollments.map((enrollment) => {
-        const displayInfo = EnrollmentService.getEnrollmentDisplayInformation(
-          enrollment,
-          enrollment.course
-        );
-
-        return {
-          ...enrollment,
-          course: enrollment.course ? {
-            ...enrollment.course,
-            price: parseFloat(enrollment.course.price), // Convert decimal string to number
-          } : undefined,
-          _display: displayInfo,
-        };
-      });
-
-      // Calculate user statistics
-      const statistics = EnrollmentService.calculateEnrollmentStatistics(
-        result.enrollments,
-        result.enrollments.map(e => e.course).filter(Boolean) as any[]
+    // Apply business logic transformations
+    const enrollmentsWithDisplayInfo = result.enrollments.map((enrollment) => {
+      const displayInfo = EnrollmentService.getEnrollmentDisplayInformation(
+        enrollment,
+        enrollment.course
       );
 
       return {
-        enrollments: enrollmentsWithDisplayInfo,
-        total: result.total,
-        limit,
-        offset,
-        _statistics: statistics,
+        ...enrollment,
+        course: enrollment.course ? {
+          ...enrollment.course,
+          price: parseFloat(enrollment.course.price), // Convert decimal string to number
+        } : undefined,
+        _display: displayInfo,
       };
-    } catch (dbError) {
-      // Handle database errors
-      console.error("Database error in getMyCourses:", dbError);
-      
-      // If it's already a known error, re-throw it
-      if (dbError && typeof dbError === "object" && "code" in dbError) {
-        throw dbError;
-      }
+    });
 
-      // Otherwise, throw a generic validation error
-      throw errors.VALIDATION_FAILED({
-        data: {
-          field: "database",
-          reason: "Failed to retrieve user courses",
-        },
-      });
-    }
-  });
+    // Calculate user statistics
+    const statistics = EnrollmentService.calculateEnrollmentStatistics(
+      result.enrollments,
+      result.enrollments.map(e => e.course).filter(Boolean) as any[]
+    );
+
+    return {
+      enrollments: enrollmentsWithDisplayInfo,
+      total: result.total,
+      limit,
+      offset,
+      _statistics: statistics,
+    };
+  });;

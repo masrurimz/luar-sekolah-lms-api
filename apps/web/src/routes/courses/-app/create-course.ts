@@ -20,54 +20,22 @@ import { implement } from "@orpc/server";
 import type { Context } from "@/lib/orpc/context";
 import { CourseContracts } from "../-domain/contracts";
 import { CourseRepository } from "../-lib/course-repository";
-import { CourseService } from "../-domain/services";
 
-export const createCourse = implement(CourseContracts.create)
+export  const createCourse = implement(CourseContracts.create)
   .$context<Context>()
-  .handler(async ({ input, context, errors }) => {
+  .handler(async ({ input, context }) => {
     // Extract creator ID if user is authenticated
     const creatorId = context.session?.user?.id;
 
-    try {
-      // Comprehensive validation using service layer
-      const validationResults = CourseService.validateCompleteCourse(input);
+    // Prepare course data with creator attribution
+    const courseData = {
+      ...input,
+      createdBy: creatorId, // Will be undefined for anonymous users
+    };
 
-      if (validationResults.length > 0) {
-        const firstError = validationResults[0];
-        throw errors.VALIDATION_FAILED({
-          data: {
-            field: firstError.field || "unknown",
-            reason: firstError.reason || "Validation failed",
-          },
-        });
-      }
+    // Repository operation to create course
+    const newCourse = await CourseRepository.create(context.db, courseData);
 
-      // Prepare course data with creator attribution
-      const courseData = {
-        ...input,
-        createdBy: creatorId, // Will be undefined for anonymous users
-      };
-
-      // Repository operation to create course
-      const newCourse = await CourseRepository.create(context.db, courseData);
-
-      // Return clean schema type without display transformations
-      return newCourse;
-    } catch (dbError) {
-      // Handle database errors
-      console.error("Database error in createCourse:", dbError);
-
-      // If it's already a known error, re-throw it
-      if (dbError && typeof dbError === "object" && "code" in dbError) {
-        throw dbError;
-      }
-
-      // Otherwise, throw a generic validation error
-      throw errors.VALIDATION_FAILED({
-        data: {
-          field: "database",
-          reason: "Failed to create course",
-        },
-      });
-    }
-  });
+    // Return clean schema type without display transformations
+    return newCourse;
+  });;

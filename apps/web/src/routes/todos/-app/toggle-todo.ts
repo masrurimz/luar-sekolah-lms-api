@@ -20,33 +20,21 @@ import type { Context } from "@/lib/orpc/context";
 import { TodoContracts } from "../-domain/contracts";
 import { TodoRepository } from "../-lib/todo-repository";
 
-export const toggleTodo = implement(TodoContracts.toggle)
+export  const toggleTodo = implement(TodoContracts.toggle)
   .$context<Context>()
   .handler(async ({ input, context, errors }) => {
     const { id } = input;
 
-    try {
-      // Repository operation to toggle todo completion status
-      const toggledTodo = await TodoRepository.toggle(context.db, id);
+    // Repository operation to toggle todo completion status
+    const toggledTodo = await TodoRepository.toggle(context.db, id);
 
-      if (!toggledTodo) {
-        throw errors.NOT_FOUND({
-          data: {
-            id,
-          },
-        });
-      }
-
-      return toggledTodo;
-    } catch (dbError) {
-      // Handle database errors
-      console.error("Database error in toggleTodo:", dbError);
-
-      throw errors.VALIDATION_FAILED({
+    if (!toggledTodo) {
+      throw errors.NOT_FOUND({
         data: {
-          field: "database",
-          reason: "Failed to toggle todo status",
+          id,
         },
       });
     }
-  });
+
+    return toggledTodo;
+  });;

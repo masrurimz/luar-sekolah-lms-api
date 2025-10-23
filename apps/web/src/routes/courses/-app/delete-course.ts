@@ -27,56 +27,38 @@ export const deleteCourse = implement(CourseContracts.delete)
   .handler(async ({ input, context, errors }) => {
     const { id } = input;
 
-    try {
-      // First, check if course exists
-      const existingCourse = await CourseRepository.findById(context.db, id);
-      
-      if (!existingCourse) {
-        throw errors.NOT_FOUND({
-          data: { id },
-        });
-      }
+    // First, check if course exists
+    const existingCourse = await CourseRepository.findById(context.db, id);
 
-      // Check if course has active enrollments
-      const enrollmentStats = await EnrollmentRepository.findByCourse(context.db, id, 1, 0);
-      
-      if (enrollmentStats.total > 0) {
-        throw errors.CANNOT_DELETE({
-          data: {
-            id,
-            reason: `Course has ${enrollmentStats.total} active enrollments`,
-          },
-        });
-      }
+    if (!existingCourse) {
+      throw errors.NOT_FOUND({
+        data: { id },
+      });
+    }
 
-      // Repository operation to delete course
-      const deleteSuccess = await CourseRepository.delete(context.db, id);
+    // Check if course has active enrollments
+    const enrollmentStats = await EnrollmentRepository.findByCourse(context.db, id, 1, 0);
 
-      if (!deleteSuccess) {
-        throw errors.NOT_FOUND({
-          data: { id },
-        });
-      }
-
-      return {
-        success: true,
-        id,
-      };
-    } catch (dbError) {
-      // Handle database errors
-      console.error("Database error in deleteCourse:", dbError);
-      
-      // If it's already a known error, re-throw it
-      if (dbError && typeof dbError === "object" && "code" in dbError) {
-        throw dbError;
-      }
-
-      // Otherwise, throw a generic validation error
-      throw errors.VALIDATION_FAILED({
+    if (enrollmentStats.total > 0) {
+      throw errors.CANNOT_DELETE({
         data: {
-          field: "database",
-          reason: "Failed to delete course",
+          id,
+          reason: `Course has ${enrollmentStats.total} active enrollments`,
         },
       });
     }
-  });
+
+    // Repository operation to delete course
+    const deleteSuccess = await CourseRepository.delete(context.db, id);
+
+    if (!deleteSuccess) {
+      throw errors.NOT_FOUND({
+        data: { id },
+      });
+    }
+
+    return {
+      success: true,
+      id,
+    };
+  });;

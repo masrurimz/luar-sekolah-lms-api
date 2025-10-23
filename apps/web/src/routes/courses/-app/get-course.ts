@@ -21,38 +21,20 @@ import { CourseContracts } from "../-domain/contracts";
 import { CourseRepository } from "../-lib/course-repository";
 
 
-export const getCourse = implement(CourseContracts.get)
+export  const getCourse = implement(CourseContracts.get)
   .$context<Context>()
   .handler(async ({ input, context, errors }) => {
     const { id } = input;
 
-    try {
-      // Repository operation to fetch course by ID
-      const course = await CourseRepository.findById(context.db, id);
+    // Repository operation to fetch course by ID
+    const course = await CourseRepository.findById(context.db, id);
 
-      if (!course) {
-        throw errors.NOT_FOUND({
-          data: { id },
-        });
-      }
-
-      // Return clean schema type without display transformations
-      return course;
-    } catch (dbError) {
-      // Handle database errors
-      console.error("Database error in getCourse:", dbError);
-
-      // If it's already a known error, re-throw it
-      if (dbError && typeof dbError === "object" && "code" in dbError) {
-        throw dbError;
-      }
-
-      // Otherwise, throw a generic validation error
-      throw errors.VALIDATION_FAILED({
-        data: {
-          field: "database",
-          reason: "Failed to retrieve course",
-        },
+    if (!course) {
+      throw errors.NOT_FOUND({
+        data: { id },
       });
     }
-  });
+
+    // Return clean schema type without display transformations
+    return course;
+  });;

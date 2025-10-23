@@ -24,28 +24,16 @@ export const getTodo = implement(TodoContracts.get)
   .handler(async ({ input, context, errors }) => {
     const { id } = input;
 
-    try {
-      // Repository operation to fetch specific todo
-      const todo = await TodoRepository.getById(context.db, id);
+    // Repository operation to fetch specific todo
+    const todo = await TodoRepository.getById(context.db, id);
 
-      if (!todo) {
-        throw errors.NOT_FOUND({
-          data: {
-            id,
-          },
-        });
-      }
-
-      return todo;
-    } catch (dbError) {
-      // Handle database errors
-      console.error("Database error in getTodo:", dbError);
-
-      throw errors.VALIDATION_FAILED({
+    if (!todo) {
+      throw errors.NOT_FOUND({
         data: {
-          field: "database",
-          reason: "Failed to retrieve todo",
+          id,
         },
       });
     }
-  });
+
+    return todo;
+  });;

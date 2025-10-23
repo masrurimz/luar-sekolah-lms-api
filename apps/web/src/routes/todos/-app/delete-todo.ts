@@ -20,7 +20,6 @@ import { implement } from "@orpc/server";
 import type { Context } from "@/lib/orpc/context";
 import { TodoContracts } from "../-domain/contracts";
 import { TodoRepository } from "../-lib/todo-repository";
-import { TodoService } from "../-domain/services";
 
 export const deleteTodo = implement(TodoContracts.delete)
   .$context<Context>()
@@ -37,44 +36,21 @@ export const deleteTodo = implement(TodoContracts.delete)
       });
     }
 
-    // Check if todo can be deleted using service layer
-    const canDelete = TodoService.canDeleteTodo(id);
-    if (!canDelete.canDelete) {
+    // Repository operation to delete todo
+    const deleted = await TodoRepository.delete(context.db, id);
+
+    if (!deleted) {
       throw errors.CANNOT_DELETE({
         data: {
           id,
-          reason: canDelete.reason || "Todo cannot be deleted",
+          reason: "Todo could not be deleted",
         },
       });
     }
 
-    try {
-      // Repository operation to delete todo
-      const deleted = await TodoRepository.delete(context.db, id);
-
-      if (!deleted) {
-        throw errors.CANNOT_DELETE({
-          data: {
-            id,
-            reason: "Todo could not be deleted",
-          },
-        });
-      }
-
-      // Return success object as per contract
-      return {
-        success: true,
-        id,
-      };
-    } catch (dbError) {
-      // Handle database errors
-      console.error("Database error in deleteTodo:", dbError);
-
-      throw errors.VALIDATION_FAILED({
-        data: {
-          field: "database",
-          reason: "Failed to delete todo",
-        },
-      });
-    }
-  });
+    // Return success object as per contract
+    return {
+      success: true,
+      id,
+    };
+  });;
